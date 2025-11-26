@@ -8,6 +8,7 @@ THRESHOLD = 150 #Value between 0 and 255 which is the boundary between black and
 def generateImages(frontCopperPath, backCopperPath, outlinePath, outputPath = os.path.expanduser('~/Downloads')):
     outlineImg = Image.open(outlinePath).convert('RGB')
     outlineArr = np.array(outlineImg)
+    print(outlineArr)
     #makes output directory if it does not exist
     if not os.path.isdir(outputPath):
          print("output path does not exist")
@@ -136,10 +137,15 @@ def findBoardBoundaries(imgArr, threshold = 150):
 """
 def resizeImg(img, padding, filename):
     imgArr = np.array(img)
+    print(imgArr)
     imgHeight,imgWidth  = imgArr.shape[0], imgArr.shape[1]
+    if imgArr.shape[2] == 4:
+         imgArr = imgArr[:, :, :3]
+    print(imgHeight,imgWidth, imgArr.shape[2])
     resizedImg = np.zeros([imgHeight + padding * 2, imgWidth +padding * 2, 3], dtype= np.uint8)
     resizedImg[padding: padding + imgHeight, padding: padding + imgWidth] = imgArr
     img = Image.fromarray(resizedImg, 'RGB')
     print(f'saved image: {filename}')
     img.save(filename, dpi=(1000,1000))
+
     
